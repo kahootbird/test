@@ -90,6 +90,18 @@
 			}
 		})
 
+			if (this.getNode('keypress').w == true)
+				this.getNode('black-box').y--
+			if (this.getNode('keypress').s == true)
+				this.getNode('black-box').y++
+
+			if (this.getNode('keypress').uparrow == true)
+				this.getNode('red-box').y--
+			if (this.getNode('keypress').downarrow == true)
+				this.getNode('red-box').y++
+
+
+			/*
 			this.getNode('black-box').y++;
 
 			if(Math.cos(this.timestamp / 100) > 0){
@@ -97,8 +109,9 @@
 			}else{
 				this.getNode('red-box').direction = 1;
 			}
-
 			this.getNode('red-box').x+=this.getNode('red-box').direction;
+		*/
+
 		};
 	</script>
 </body>
