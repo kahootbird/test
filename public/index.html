@@ -50,13 +50,44 @@
 		};
 
 		app.onUpdate = function(time){
-			document.addEventListener("keyup", (e) =>
+			document.addEventListener("keydown", (e) =>
 		{
-		console.log("KEYUP")
+			if (e.key == "w")
+			{
+				this.getNode('keypress').w = true;
+			}
+			if (e.key == "s")
+			{
+				this.getNode('keypress').s = true;
+			}
+
+			if (e.key == "ArrowUp")
+			{
+				this.getNode('keypress').uparrow = true;
+			}
+			if (e.key == "ArrowDown")
+			{
+				this.getNode('keypress').downarrow = true;
+			}
 		})
-		document.addEventListener("keydown", (e) =>
+		document.addEventListener("keyup", (e) =>
 		{
-			console.log("KEYDOWN")
+			if (e.key == "w")
+			{
+				this.getNode('keypress').w = false;
+			}
+			if (e.key == "s")
+			{
+				this.getNode('keypress').s = false;
+			}
+			if (e.key == "ArrowUp")
+			{
+				this.getNode('keypress').uparrow = false;
+			}
+			if (e.key == "ArrowDown")
+			{
+				this.getNode('keypress').downarrow = false;
+			}
 		})
 
 			this.getNode('black-box').y++;
