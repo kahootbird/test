@@ -50,13 +50,13 @@
 		};
 
 		app.onUpdate = function(time){
-			document.addEventListener("keypress", (e) =>
-			{
-
-			})
-		document.addEventListener("keyUp", (e) =>
+			document.addEventListener("keyup", (e) =>
 		{
-			
+		console.log("KEYUP")
+		})
+		document.addEventListener("keydown", (e) =>
+		{
+			console.log("KEYDOWN")
 		})
 
 			this.getNode('black-box').y++;
