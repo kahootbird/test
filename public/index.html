@@ -21,6 +21,15 @@
 
 		app.onInit = function(){
 			this.nodes.push({
+				id : 'keypress',
+				w  : false,
+				s  : false,
+				uparrow  : false,
+				downarrow : false,
+				space : false
+			});
+
+			this.nodes.push({
 				id : 'red-box',
 				x  : 100,
 				y  : 0,
