@@ -42,18 +42,18 @@
 				id : 'red-box',
 				x  : 0,
 				y  : 0,
-				width  : 50,
-				height : 100,
+				width  : canvas.width*.05,
+				height : canvas.height*.25,
 				color  : 'white',
 				direction : 0
 			});
 
 			this.nodes.push({
 				id : 'black-box',
-				x  : 750,
+				x  : canvas.width-(canvas.width*.05),
 				y  : 0,
-				width  : 50,
-				height : 100,
+				width  : canvas.width*.05,
+				height : canvas.height*.25,
 				color  : 'white'
 			});
 
@@ -61,10 +61,10 @@
 				id : 'ball',
 				x  : canvas.width/2-50,
 				y  : canvas.height/2-25,
-				width  : 100,
-				height : 50,
-				velocityX: (3*rand_1_or_neg1()),
-				velocityY: (3*rand_1_or_neg1()),
+				width  : canvas.width*.1,
+				height : canvas.height*.1,
+				velocityX: (4*rand_1_or_neg1()),
+				velocityY: (4*rand_1_or_neg1()),
 				color  : 'white'
 			})
 
@@ -77,6 +77,11 @@
 					id : 'score',
 					team1_score: 0,
 					team2_score: 0
+				});
+
+				this.nodes.push({
+					id : 'speed',
+					speed: 2
 				});
 
 		};
@@ -163,26 +168,26 @@
 		}
 		function movePlayer()
 		{
-			if (app.getNode('keypress').uparrow == true)
+			if (app.getNode('keypress').w == true)
 				if (app.getNode('black-box').y > 0)
 				{
-					app.getNode('black-box').y--
+					app.getNode('black-box').y -= app.getNode('speed').speed
 				}
-			if (app.getNode('keypress').downarrow == true)
+			if (app.getNode('keypress').s == true)
 				if (app.getNode('black-box').y < canvas.height-app.getNode('black-box').height)
 				{
-					app.getNode('black-box').y++
+					app.getNode('black-box').y += app.getNode('speed').speed
 				}
 
 				if (app.getNode('keypress').uparrow == true)
 					if (app.getNode('red-box').y > 0)
 					{
-						app.getNode('red-box').y--
+						app.getNode('red-box').y -= app.getNode('speed').speed
 					}
 				if (app.getNode('keypress').downarrow == true)
 					if (app.getNode('red-box').y < canvas.height-app.getNode('red-box').height)
 					{
-						app.getNode('red-box').y++
+						app.getNode('red-box').y += app.getNode('speed').speed
 					}
 		}
 		function paddleCollision()
