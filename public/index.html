@@ -163,15 +163,27 @@
 		}
 		function movePlayer()
 		{
-				if (app.getNode('keypress').w == true)
+			if (app.getNode('keypress').uparrow == true)
+				if (app.getNode('black-box').y > 0)
+				{
 					app.getNode('black-box').y--
-				if (app.getNode('keypress').s == true)
+				}
+			if (app.getNode('keypress').downarrow == true)
+				if (app.getNode('black-box').y < canvas.height-app.getNode('black-box').height)
+				{
 					app.getNode('black-box').y++
+				}
 
 				if (app.getNode('keypress').uparrow == true)
-					app.getNode('red-box').y--
+					if (app.getNode('red-box').y > 0)
+					{
+						app.getNode('red-box').y--
+					}
 				if (app.getNode('keypress').downarrow == true)
-					app.getNode('red-box').y++
+					if (app.getNode('red-box').y < canvas.height-app.getNode('red-box').height)
+					{
+						app.getNode('red-box').y++
+					}
 		}
 		function paddleCollision()
 		{
