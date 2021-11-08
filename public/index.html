@@ -113,7 +113,7 @@
 			{
 				app.getNode('keypress').downarrow = true;
 			}
-			if (e.key == "Space" || e.keyCode == 32)
+			if (e.key == "space" || e.keyCode == 32)
 			{
 				app.getNode('keypress').space = true;
 			}
@@ -140,9 +140,16 @@
 			if (e.key == "space" || e.keyCode == 32)
 			{
 				app.getNode('keypress').space = false;
+				pause_unpause()
 			}
 		})
-
+		function pause_unpause()
+		{
+			if (app.getNode('gamestate').gamestate == 1)
+				app.getNode('gamestate').gamestate = 0
+			else if (app.getNode('gamestate').gamestate == 0)
+					app.getNode('gamestate').gamestate = 1
+		}
 		function moveBall()
 		{
 						//Move ball
@@ -229,10 +236,7 @@
 					app.getNode('ball').velocityX *= rand_1_or_neg1()
 				checkScore()
 			}
-			if (app.getNode('keypress').space == true)
-				{
-					app.getNode('gamestate').gamestate = 1
-				}
+
 		};
 	</script>
 </body>
