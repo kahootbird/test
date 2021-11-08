@@ -75,7 +75,8 @@
 
 				this.nodes.push({
 					id : 'score',
-					score: 0
+					team1_score: 0,
+					team2_score: 0
 				});
 
 		};
@@ -200,12 +201,24 @@
 		{
 			if (app.getNode('ball').x-app.getNode('ball').width > canvas.width)
 			{
-				console.log("SCORE")
+				app.getNode('score').team2_score++
+				console.log("Score: "+  app.getNode('score').team1_score + " to " + app.getNode('score').team2_score)
+				reset_game()
 			}
 			if (app.getNode('ball').x+app.getNode('ball').width < 0)
 			{
-				console.log("SCORE")
+				app.getNode('score').team1_score++
+				console.log("Score: " + app.getNode('score').team1_score + " to " + app.getNode('score').team2_score)
+				reset_game()
 			}
+		}
+		function reset_game()
+		{
+			app.getNode('ball').x = canvas.width/2-50
+			app.getNode('ball').y = canvas.height/2-25
+			app.getNode('ball').velocityX = (3*rand_1_or_neg1())
+			app.getNode('ball').velocityY = (3*rand_1_or_neg1())
+
 		}
 		app.onUpdate = function(time){
 			if (app.getNode('gamestate').gamestate == 1)
