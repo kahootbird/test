@@ -20,6 +20,7 @@
 		//Sample functions, remove these functions and design ping-pong game with onInit and onUpdate.
 
 		app.onInit = function(){
+/*
 			this.nodes.push({
 				id : 'background',
 				x  : 0,
@@ -28,7 +29,7 @@
 				height : canvas.height,
 				color  : 'black'
 			});
-
+*/
 			this.nodes.push({
 				id : 'keypress',
 				w  : false,
@@ -44,7 +45,7 @@
 				y  : 0,
 				width  : canvas.width*.05,
 				height : canvas.height*.25,
-				color  : 'white'
+				color  : 'red'
 			});
 
 			this.nodes.push({
@@ -53,7 +54,7 @@
 				y  : 0,
 				width  : canvas.width*.05,
 				height : canvas.height*.25,
-				color  : 'white'
+				color  : 'black'
 			});
 
 			this.nodes.push({
@@ -66,7 +67,7 @@
 				velocityY: (4*rand_1_or_neg1()),
 				//left / right direction as 0/1
 				direction: 1,
-				color  : 'white'
+				color  : 'black'
 			})
 
 			this.nodes.push({
@@ -246,6 +247,9 @@
 
 		}
 		app.onUpdate = function(time){
+			//Score in top left and right middle
+			app.drawText((canvas.width/2)+(canvas.width/4),canvas.height/6,	"black",app.getNode('score').team2_score)
+			app.drawText((canvas.width/4),canvas.height/6,	"red",app.getNode('score').team1_score)
 			if (app.getNode('gamestate').gamestate == 1)
 			{
 				moveBall()

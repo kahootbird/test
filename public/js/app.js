@@ -15,6 +15,8 @@ var app = {
 	now        : 0,
 	lastUpdate : 0,
 
+//drawtext
+	texttodraw: "",
 	init : function(){
 		this.canvas  = document.getElementById('canvas');
 		this.context = this.canvas.getContext('2d');
@@ -22,6 +24,17 @@ var app = {
 		this.render();
 		this.onInit();
 	},
+	drawText: function(x,y,color,txttodraw)
+	{
+			texttodraw = txttodraw
+			console.log("DRAW: " + txttodraw)
+			this.context.font = '48px Arial';
+  		//this.context.fillText('Hello world', 80, 80);
+			this.context.fillStyle = color
+			this.context.fillText(txttodraw, x, y);
+
+	},
+
 	render : function(){
 		this.clear();
 		this.update();
