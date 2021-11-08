@@ -21,6 +21,15 @@
 
 		app.onInit = function(){
 			this.nodes.push({
+				id : 'background',
+				x  : 0,
+				y  : 0,
+				width  : canvas.width,
+				height : canvas.height,
+				color  : 'black'
+			});
+
+			this.nodes.push({
 				id : 'keypress',
 				w  : false,
 				s  : false,
@@ -35,7 +44,7 @@
 				y  : 0,
 				width  : 50,
 				height : 100,
-				color  : 'red',
+				color  : 'white',
 				direction : 0
 			});
 
@@ -45,7 +54,7 @@
 				y  : 0,
 				width  : 50,
 				height : 100,
-				color  : 'black'
+				color  : 'white'
 			});
 
 			this.nodes.push({
@@ -56,7 +65,7 @@
 				height : 50,
 				velocityX: (3*rand_1_or_neg1()),
 				velocityY: (3*rand_1_or_neg1()),
-				color  : 'green'
+				color  : 'white'
 			})
 
 
@@ -153,7 +162,7 @@
 			rpaddleWidth = app.getNode('black-box').width,
 			rpaddleHeight = app.getNode('black-box').height
 			//if left paddle hits, return 1
-			
+
 			if (ballY > lpaddleY
 			&& ballY < lpaddleY+lpaddleHeight
 			&& ballX < lpaddleX+lpaddleWidth
