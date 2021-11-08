@@ -138,25 +138,44 @@
 				if (app.getNode('keypress').downarrow == true)
 					app.getNode('red-box').y++
 		}
+		function paddleCollision()
+		{
+			//simplify expresisons a bit
+			let ballX = app.getNode('ball').x,
+			ballY = app.getNode('ball').y,
+			lpaddleX = app.getNode('red-box').x,
+			lpaddleY = app.getNode('red-box').y,
+			lpaddleWidth = app.getNode('red-box').width,
+			lpaddleHeight = app.getNode('red-box').height
+
+			rpaddleX = app.getNode('black-box').x,
+			rpaddleY = app.getNode('black-box').y,
+			rpaddleWidth = app.getNode('black-box').width,
+			rpaddleHeight = app.getNode('black-box').height
+			//if left paddle hits, return 1
+			
+			if (ballY > lpaddleY
+			&& ballY < lpaddleY+lpaddleHeight
+			&& ballX < lpaddleX+lpaddleWidth
+			)
+			// if right paddle hits, return 1
+				return(1)
+
+				if (ballY > rpaddleY
+				&& ballY < rpaddleY+rpaddleHeight
+				&& ballX > rpaddleX-app.getNode('ball').width
+				)
+					return(1)
+			//return 0 if both fail
+			return(0)
+		}
 
 		app.onUpdate = function(time){
 
 		moveBall()
 		movePlayer()
-			//Random direction by velocity (x/y * -1) randomly
-
-
-
-			/*
-			this.getNode('black-box').y++;
-
-			if(Math.cos(this.timestamp / 100) > 0){
-				this.getNode('red-box').direction = -1;
-			}else{
-				this.getNode('red-box').direction = 1;
-			}
-			this.getNode('red-box').x+=this.getNode('red-box').direction;
-		*/
+		if (paddleCollision() == 1)
+			app.getNode('ball').velocityX *= rand_1_or_neg1()
 
 		};
 	</script>
