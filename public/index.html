@@ -68,6 +68,11 @@
 				color  : 'white'
 			})
 
+			this.nodes.push({
+				id : 'gamestate',
+				gamestate  :0,
+				});
+
 
 		};
 
@@ -103,6 +108,11 @@
 			{
 				app.getNode('keypress').downarrow = true;
 			}
+			if (e.key == "Space" || e.keyCode == 32)
+			{
+				app.getNode('keypress').space = true;
+			}
+			//console.log(e.keyCode)
 		})
 		document.addEventListener("keyup", (e) =>
 		{
@@ -121,6 +131,10 @@
 			if (e.key == "ArrowDown")
 			{
 				app.getNode('keypress').downarrow = false;
+			}
+			if (e.key == "space" || e.keyCode == 32)
+			{
+				app.getNode('keypress').Space = false;
 			}
 		})
 
@@ -180,12 +194,18 @@
 		}
 
 		app.onUpdate = function(time){
-
-		moveBall()
-		movePlayer()
-		if (paddleCollision() == 1)
-			app.getNode('ball').velocityX *= rand_1_or_neg1()
-
+			if (app.getNode('gamestate').gamestate == 1)
+			{
+				moveBall()
+				movePlayer()
+				if (paddleCollision() == 1)
+					app.getNode('ball').velocityX *= rand_1_or_neg1()
+			}
+			if (app.getNode('keypress').space == true)
+				{
+					console.log("space hit")
+					app.getNode('gamestate').gamestate = 1
+				}
 		};
 	</script>
 </body>
