@@ -44,8 +44,7 @@
 				y  : 0,
 				width  : canvas.width*.05,
 				height : canvas.height*.25,
-				color  : 'white',
-				direction : 0
+				color  : 'white'
 			});
 
 			this.nodes.push({
@@ -65,6 +64,8 @@
 				height : canvas.height*.1,
 				velocityX: (4*rand_1_or_neg1()),
 				velocityY: (4*rand_1_or_neg1()),
+				//left / right direction as 0/1
+				direction: 1,
 				color  : 'white'
 			})
 
@@ -94,7 +95,6 @@
 				rand = -1
 			if (rand == 1)
 				rand = 1
-			console.log(rand)
 			return(rand)
 		}
 
@@ -192,6 +192,7 @@
 		}
 		function paddleCollision()
 		{
+			//Function returns 1 if collision left paddle and 2 if collision right paddle
 			//simplify expresisons a bit
 			let ballX = app.getNode('ball').x,
 			ballY = app.getNode('ball').y,
@@ -217,7 +218,7 @@
 				&& ballY < rpaddleY+rpaddleHeight
 				&& ballX > rpaddleX-app.getNode('ball').width
 				)
-					return(1)
+					return(2)
 			//return 0 if both fail
 			return(0)
 		}
@@ -249,8 +250,15 @@
 			{
 				moveBall()
 				movePlayer()
-				if (paddleCollision() == 1)
+				if (paddleCollision() == 1 && app.getNode('ball').velocityX < 0)
+				{
 					app.getNode('ball').velocityX *= rand_1_or_neg1()
+				}
+				else if (paddleCollision() == 2 && app.getNode('ball').velocityX > 0)
+				{
+					app.getNode('ball').velocityX *= rand_1_or_neg1()
+				}
+
 				checkScore()
 			}
 
