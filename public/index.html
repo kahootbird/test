@@ -73,6 +73,10 @@
 				gamestate  :0,
 				});
 
+				this.nodes.push({
+					id : 'score',
+					score: 0
+				});
 
 		};
 
@@ -134,7 +138,7 @@
 			}
 			if (e.key == "space" || e.keyCode == 32)
 			{
-				app.getNode('keypress').Space = false;
+				app.getNode('keypress').space = false;
 			}
 		})
 
@@ -192,7 +196,17 @@
 			//return 0 if both fail
 			return(0)
 		}
-
+		function checkScore()
+		{
+			if (app.getNode('ball').x-app.getNode('ball').width > canvas.width)
+			{
+				console.log("SCORE")
+			}
+			if (app.getNode('ball').x+app.getNode('ball').width < 0)
+			{
+				console.log("SCORE")
+			}
+		}
 		app.onUpdate = function(time){
 			if (app.getNode('gamestate').gamestate == 1)
 			{
@@ -200,10 +214,10 @@
 				movePlayer()
 				if (paddleCollision() == 1)
 					app.getNode('ball').velocityX *= rand_1_or_neg1()
+				checkScore()
 			}
 			if (app.getNode('keypress').space == true)
 				{
-					console.log("space hit")
 					app.getNode('gamestate').gamestate = 1
 				}
 		};
