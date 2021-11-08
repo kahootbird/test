@@ -248,8 +248,8 @@
 		}
 		app.onUpdate = function(time){
 			//Score in top left and right middle
-			app.drawText((canvas.width/2)+(canvas.width/4),canvas.height/6,	"black",app.getNode('score').team2_score)
-			app.drawText((canvas.width/4),canvas.height/6,	"red",app.getNode('score').team1_score)
+			app.drawText((canvas.width/2)+(canvas.width/4),canvas.height/6,	"black",app.getNode('score').team1_score)
+			app.drawText((canvas.width/4),canvas.height/6,	"red",app.getNode('score').team2_score)
 			if (app.getNode('gamestate').gamestate == 1)
 			{
 				moveBall()

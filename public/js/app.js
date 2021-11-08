@@ -24,12 +24,11 @@ var app = {
 		this.render();
 		this.onInit();
 	},
+	//Draw text
 	drawText: function(x,y,color,txttodraw)
 	{
 			texttodraw = txttodraw
-			console.log("DRAW: " + txttodraw)
 			this.context.font = '48px Arial';
-  		//this.context.fillText('Hello world', 80, 80);
 			this.context.fillStyle = color
 			this.context.fillText(txttodraw, x, y);
 
