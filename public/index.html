@@ -252,13 +252,13 @@
 			if (app.getNode('ball').x-app.getNode('ball').width > canvas.width)
 			{
 				app.getNode('score').team2_score++
-				console.log("Score: "+  app.getNode('score').team1_score + " to " + app.getNode('score').team2_score)
+				console.log("Score: "+  app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
 				reset_game()
 			}
 			if (app.getNode('ball').x+app.getNode('ball').width < 0)
 			{
 				app.getNode('score').team1_score++
-				console.log("Score: " + app.getNode('score').team1_score + " to " + app.getNode('score').team2_score)
+				console.log("Score: " + app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
 				reset_game()
 			}
 		}
