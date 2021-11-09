@@ -20,7 +20,7 @@
 		//Sample functions, remove these functions and design ping-pong game with onInit and onUpdate.
 
 		app.onInit = function(){
-/*
+
 			this.nodes.push({
 				id : 'background',
 				x  : 0,
@@ -29,7 +29,23 @@
 				height : canvas.height,
 				color  : 'black'
 			});
-*/
+
+			this.nodes.push({
+				id : 'score1txt',
+				x  : (canvas.width/4),
+				y  : canvas.height/6,
+				color  : 'white',
+				text : "0"
+			});
+
+			this.nodes.push({
+				id : 'score2txt',
+				x  : (canvas.width/2)+(canvas.width/4),
+				y  : canvas.height/6,
+				color  : 'white',
+				text : "0"
+			});
+
 			this.nodes.push({
 				id : 'keypress',
 				w  : false,
@@ -40,21 +56,21 @@
 			});
 
 			this.nodes.push({
-				id : 'red-box',
+				id : 'player1',
 				x  : 0,
 				y  : 0,
 				width  : canvas.width*.05,
 				height : canvas.height*.20,
-				color  : 'red'
+				color  : 'white'
 			});
 
 			this.nodes.push({
-				id : 'black-box',
+				id : 'player2',
 				x  : canvas.width-(canvas.width*.05),
 				y  : 0,
 				width  : canvas.width*.05,
 				height : canvas.height*.20,
-				color  : 'black'
+				color  : 'white'
 			});
 
 			this.nodes.push({
@@ -73,7 +89,7 @@
 
 				//left / right direction as 0/1
 				direction: 1,
-				color  : 'black'
+				color  : 'white'
 			})
 
 			this.nodes.push({
@@ -182,25 +198,25 @@
 		function movePlayer()
 		{
 			if (app.getNode('keypress').w == true)
-				if (app.getNode('black-box').y > 0)
+				if (app.getNode('player2').y > 0)
 				{
-					app.getNode('black-box').y -= app.getNode('speed').speed
+					app.getNode('player2').y -= app.getNode('speed').speed
 				}
 			if (app.getNode('keypress').s == true)
-				if (app.getNode('black-box').y < canvas.height-app.getNode('black-box').height)
+				if (app.getNode('player2').y < canvas.height-app.getNode('player2').height)
 				{
-					app.getNode('black-box').y += app.getNode('speed').speed
+					app.getNode('player2').y += app.getNode('speed').speed
 				}
 
 				if (app.getNode('keypress').uparrow == true)
-					if (app.getNode('red-box').y > 0)
+					if (app.getNode('player1').y > 0)
 					{
-						app.getNode('red-box').y -= app.getNode('speed').speed
+						app.getNode('player1').y -= app.getNode('speed').speed
 					}
 				if (app.getNode('keypress').downarrow == true)
-					if (app.getNode('red-box').y < canvas.height-app.getNode('red-box').height)
+					if (app.getNode('player1').y < canvas.height-app.getNode('player1').height)
 					{
-						app.getNode('red-box').y += app.getNode('speed').speed
+						app.getNode('player1').y += app.getNode('speed').speed
 					}
 		}
 		function paddleCollision()
@@ -211,15 +227,15 @@
 			ballY = app.getNode('ball').y,
 			ballRadius = app.getNode('ball').radius,
 
-			lpaddleX = app.getNode('red-box').x,
-			lpaddleY = app.getNode('red-box').y,
-			lpaddleWidth = app.getNode('red-box').width,
-			lpaddleHeight = app.getNode('red-box').height
+			lpaddleX = app.getNode('player1').x,
+			lpaddleY = app.getNode('player1').y,
+			lpaddleWidth = app.getNode('player1').width,
+			lpaddleHeight = app.getNode('player1').height
 
-			rpaddleX = app.getNode('black-box').x,
-			rpaddleY = app.getNode('black-box').y,
-			rpaddleWidth = app.getNode('black-box').width,
-			rpaddleHeight = app.getNode('black-box').height
+			rpaddleX = app.getNode('player2').x,
+			rpaddleY = app.getNode('player2').y,
+			rpaddleWidth = app.getNode('player2').width,
+			rpaddleHeight = app.getNode('player2').height
 			//if left paddle hits, return 1
 			let p = []
 			//right paddle
@@ -274,8 +290,8 @@
 		}
 		app.onUpdate = function(time){
 			//Score in top left and right middle
-			app.drawText((canvas.width/2)+(canvas.width/4),canvas.height/6,	"black",app.getNode('score').team1_score)
-			app.drawText((canvas.width/4),canvas.height/6,	"red",app.getNode('score').team2_score)
+			app.getNode('score1txt').text = app.getNode('score').team2_score
+			app.getNode('score2txt').text = app.getNode('score').team1_score
 
 			if (app.getNode('gamestate').gamestate == 1)
 			{
@@ -288,11 +304,11 @@
 				{
 					app.getNode('ball').velocityX *= -1
 					//Set velocity of ball up/down depending on where it hit
-					if (app.getNode('ball').y < app.getNode('black-box').y)
+					if (app.getNode('ball').y < app.getNode('player2').y)
 					{
 						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
 					}
-					if (app.getNode('ball').y > app.getNode('black-box').y)
+					if (app.getNode('ball').y > app.getNode('player2').y)
 					{
 						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
 					}
@@ -303,11 +319,11 @@
 				{
 					app.getNode('ball').velocityX *= -1
 
-					if (app.getNode('ball').y < app.getNode('red-box').y)
+					if (app.getNode('ball').y < app.getNode('player1').y)
 					{
 						app.getNode('ball').velocityY = -(app.getNode('ball').bounce_velocityY)
 					}
-					if (app.getNode('ball').y > app.getNode('red-box').y)
+					if (app.getNode('ball').y > app.getNode('player1').y)
 					{
 						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
 					}

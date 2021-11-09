@@ -58,11 +58,17 @@ var app = {
 
 		for(var index in this.nodes){
 			var node = this.nodes[index];
-			if (node.radius != null)
+
+			if (node.text != null)
 			{
-				//console.log("NODE HAS RADIUS")
+				this.drawText(node.x,node.y,node.color,node.text)
+			}
+
+			else if (node.radius != null)
+			{
 				this.drawCircle(node.x,node.y,node.radius,node.color)
 			}
+
 			else
 			{
 				this.context.fillStyle = node.color;
