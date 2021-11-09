@@ -31,7 +31,15 @@ var app = {
 			this.context.font = '48px Arial';
 			this.context.fillStyle = color
 			this.context.fillText(txttodraw, x, y);
+	},
 
+	drawCircle: function(x,y,radius,color)
+	{
+		this.context.fillStyle = color;
+		this.context.beginPath();
+		this.context.arc(x,y,radius,0,Math.PI*2,false);
+		this.context.closePath();
+		this.context.fill();
 	},
 
 	render : function(){
@@ -50,9 +58,16 @@ var app = {
 
 		for(var index in this.nodes){
 			var node = this.nodes[index];
-
-			this.context.fillStyle = node.color;
-			this.context.fillRect(node.x, node.y, node.width, node.height);
+			if (node.radius != null)
+			{
+				//console.log("NODE HAS RADIUS")
+				this.drawCircle(node.x,node.y,node.radius,node.color)
+			}
+			else
+			{
+				this.context.fillStyle = node.color;
+				this.context.fillRect(node.x, node.y, node.width, node.height);
+			}
 		}
 
 		this.lastUpdate = Date.now();
