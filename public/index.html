@@ -75,17 +75,17 @@
 
 			this.nodes.push({
 				id : 'ball',
-				x  : canvas.width/2-50,
-				y  : canvas.height/2-25,
+				x  : canvas.width/2,
+				y  : canvas.height/2,
 				radius: canvas.width*.01+canvas.height*.01,
 				diameter: (canvas.width*.01+canvas.height*.01)*2,
 				width  : canvas.width*.1,
 				height : canvas.height*.1,
-				velocityX: (5*rand_1_or_neg1()),
-				velocityY: (5*rand_1_or_neg1()),
+				velocityX: (4*rand_1_or_neg1()),
+				velocityY: (6*rand_1_or_neg1()),
 				//bounce velocity should be same as velocity its set on paddle bounce because the value must be reset
-				bounce_velocityX: 5,
-				bounce_velocityY: 5,
+				bounce_velocityX: 4,
+				bounce_velocityY: 6,
 
 				//left / right direction as 0/1
 				direction: 1,
@@ -103,9 +103,10 @@
 					team2_score: 0
 				});
 
+				//paddle speed
 				this.nodes.push({
 					id : 'speed',
-					speed: 2
+					speed: 3
 				});
 
 		};
@@ -283,8 +284,8 @@
 		}
 
 		app.reset = function () {
-			app.getNode('ball').x = canvas.width/2-50
-			app.getNode('ball').y = canvas.height/2-25
+			app.getNode('ball').x = canvas.width/2
+			app.getNode('ball').y = canvas.height/2
 			app.getNode('ball').velocityX = (app.getNode('ball').bounce_velocityX*rand_1_or_neg1())
 			app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY*rand_1_or_neg1())
 		}
