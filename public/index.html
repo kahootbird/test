@@ -81,11 +81,11 @@
 				diameter: (canvas.width*.01+canvas.height*.01)*2,
 				width  : canvas.width*.1,
 				height : canvas.height*.1,
-				velocityX: (4*rand_1_or_neg1()),
-				velocityY: (6*rand_1_or_neg1()),
+				velocityX: (3*rand_1_or_neg1()),
+				velocityY: (5*rand_1_or_neg1()),
 				//bounce velocity should be same as velocity its set on paddle bounce because the value must be reset
-				bounce_velocityX: 4,
-				bounce_velocityY: 6,
+				bounce_velocityX: 3,
+				bounce_velocityY: 5,
 
 				//left / right direction as 0/1
 				direction: 1,
@@ -282,6 +282,23 @@
 				app.reset()
 			}
 		}
+		//Adjust ball velocity left/right based on plaer paddle
+		function adjust_ball_velocity(left_right)
+		{
+			app.getNode('ball').velocityX *= -1
+			/*Set velocity of ball up/down depending on where it hit
+			Basic logic of if statements is the same between paddle 1 & paddle 2
+			keeping code "DRY" by defining variables*/
+			let py = 0
+			if (left_right == 1) py = app.getNode('player2').y
+			if (left_right == 2) py = app.getNode('player1').y
+
+			//Bounce ball up or down depending on where it was hit
+				if (app.getNode('ball').y < py)
+					app.getNode('ball').velocityY = -(app.getNode('ball').bounce_velocityY)
+				if (app.getNode('ball').y > py)
+					app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
+		}
 
 		app.reset = function () {
 			app.getNode('ball').x = canvas.width/2
@@ -303,32 +320,12 @@
 				//right paddle collision with ball
 				if (paddleCollision() == 1 && app.getNode('ball').velocityX > 0)
 				{
-					app.getNode('ball').velocityX *= -1
-					//Set velocity of ball up/down depending on where it hit
-					if (app.getNode('ball').y < app.getNode('player2').y)
-					{
-						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
-					}
-					if (app.getNode('ball').y > app.getNode('player2').y)
-					{
-						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
-					}
-
+					adjust_ball_velocity(1)
 				}
 				//left paddle collision with ball
 				else if (paddleCollision() == 2 && app.getNode('ball').velocityX < 0)
 				{
-					app.getNode('ball').velocityX *= -1
-
-					if (app.getNode('ball').y < app.getNode('player1').y)
-					{
-						app.getNode('ball').velocityY = -(app.getNode('ball').bounce_velocityY)
-					}
-					if (app.getNode('ball').y > app.getNode('player1').y)
-					{
-						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
-					}
-
+					adjust_ball_velocity(2)
 				}
 				checkScore()
 			}
