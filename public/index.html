@@ -152,10 +152,15 @@
 			if (e.key == "space" || e.keyCode == 32)
 			{
 				app.getNode('keypress').space = false;
-				pause_unpause()
+				app.pause_unpause()
 			}
 		})
-		function pause_unpause()
+		//Unused, but specified in requirements
+		app.start = function ()
+		{
+			app.pause_unpause()
+		}
+		app.pause_unpause = function ()
 		{
 			if (app.getNode('gamestate').gamestate == 1)
 				app.getNode('gamestate').gamestate = 0
@@ -251,29 +256,27 @@
 			{
 				app.getNode('score').team2_score++
 				console.log("Score: "+  app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
-				reset_game()
+				app.reset()
 			}
 			if (app.getNode('ball').x+app.getNode('ball').width < 0)
 			{
 				app.getNode('score').team1_score++
 				console.log("Score: " + app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
-				reset_game()
+				app.reset()
 			}
 		}
-		function reset_game()
-		{
+
+		app.reset = function () {
 			app.getNode('ball').x = canvas.width/2-50
 			app.getNode('ball').y = canvas.height/2-25
 			app.getNode('ball').velocityX = (app.getNode('ball').bounce_velocityX*rand_1_or_neg1())
 			app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY*rand_1_or_neg1())
-
 		}
 		app.onUpdate = function(time){
 			//Score in top left and right middle
 			app.drawText((canvas.width/2)+(canvas.width/4),canvas.height/6,	"black",app.getNode('score').team1_score)
 			app.drawText((canvas.width/4),canvas.height/6,	"red",app.getNode('score').team2_score)
 
-			//app.drawCircle(200,200,10,"yellow")
 			if (app.getNode('gamestate').gamestate == 1)
 			{
 				//Move ball by velocity
