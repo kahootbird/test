@@ -44,7 +44,7 @@
 				x  : 0,
 				y  : 0,
 				width  : canvas.width*.05,
-				height : canvas.height*.25,
+				height : canvas.height*.20,
 				color  : 'red'
 			});
 
@@ -53,7 +53,7 @@
 				x  : canvas.width-(canvas.width*.05),
 				y  : 0,
 				width  : canvas.width*.05,
-				height : canvas.height*.25,
+				height : canvas.height*.20,
 				color  : 'black'
 			});
 
@@ -65,8 +65,12 @@
 				diameter: (canvas.width*.01+canvas.height*.01)*2,
 				width  : canvas.width*.1,
 				height : canvas.height*.1,
-				velocityX: (4*rand_1_or_neg1()),
-				velocityY: (4*rand_1_or_neg1()),
+				velocityX: (5*rand_1_or_neg1()),
+				velocityY: (5*rand_1_or_neg1()),
+				//bounce velocity should be same as velocity its set on paddle bounce because the value must be reset
+				bounce_velocityX: 5,
+				bounce_velocityY: 5,
+
 				//left / right direction as 0/1
 				direction: 1,
 				color  : 'black'
@@ -169,12 +173,6 @@
 						{
 								app.getNode('ball').velocityY  = app.getNode('ball').velocityY * -1
 						}
-						/*
-						if (app.getNode('ball').y >= (canvas.height-app.getNode('ball').height) || app.getNode('ball').y <= 0)
-						{
-							app.getNode('ball').velocityY  = app.getNode('ball').velocityY * -1
-						}
-						*/
 		}
 		function movePlayer()
 		{
@@ -266,8 +264,8 @@
 		{
 			app.getNode('ball').x = canvas.width/2-50
 			app.getNode('ball').y = canvas.height/2-25
-			app.getNode('ball').velocityX = (3*rand_1_or_neg1())
-			app.getNode('ball').velocityY = (3*rand_1_or_neg1())
+			app.getNode('ball').velocityX = (app.getNode('ball').bounce_velocityX*rand_1_or_neg1())
+			app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY*rand_1_or_neg1())
 
 		}
 		app.onUpdate = function(time){
@@ -278,17 +276,40 @@
 			//app.drawCircle(200,200,10,"yellow")
 			if (app.getNode('gamestate').gamestate == 1)
 			{
+				//Move ball by velocity
 				moveBall()
+				//Move played by keypress
 				movePlayer()
+				//right paddle collision with ball
 				if (paddleCollision() == 1 && app.getNode('ball').velocityX > 0)
 				{
-					app.getNode('ball').velocityX *= rand_1_or_neg1()
+					app.getNode('ball').velocityX *= -1
+					//Set velocity of ball up/down depending on where it hit
+					if (app.getNode('ball').y < app.getNode('black-box').y)
+					{
+						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
+					}
+					if (app.getNode('ball').y > app.getNode('black-box').y)
+					{
+						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
+					}
+
 				}
+				//left paddle collision with ball
 				else if (paddleCollision() == 2 && app.getNode('ball').velocityX < 0)
 				{
-					app.getNode('ball').velocityX *= rand_1_or_neg1()
-				}
+					app.getNode('ball').velocityX *= -1
 
+					if (app.getNode('ball').y < app.getNode('red-box').y)
+					{
+						app.getNode('ball').velocityY = -(app.getNode('ball').bounce_velocityY)
+					}
+					if (app.getNode('ball').y > app.getNode('red-box').y)
+					{
+						app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
+					}
+
+				}
 				checkScore()
 			}
 
