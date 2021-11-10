@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+	/* Make canvas full size */
+	canvas {
+	    position:fixed;
+	    left:0;
+	    top:0;
+	    width:100%;
+	    height:100%;
+	}
+	</style>
 	<title>Ping Pong Game</title>
 </head>
 <body>
@@ -10,36 +20,316 @@
 		//Sample functions, remove these functions and design ping-pong game with onInit and onUpdate.
 
 		app.onInit = function(){
-			this.nodes.push({
-				id : 'red-box',
-				x  : 100,
-				y  : 0,
-				width  : 100,
-				height : 100,
-				color  : 'red',
-				direction : 0
-			});
 
 			this.nodes.push({
-				id : 'black-box',
-				x  : 50,
+				id : 'background',
+				x  : 0,
 				y  : 0,
-				width  : 150,
-				height : 150,
+				width  : canvas.width,
+				height : canvas.height,
 				color  : 'black'
 			});
+
+			this.nodes.push({
+				id : 'score1txt',
+				x  : (canvas.width/4),
+				y  : canvas.height/6,
+				color  : 'white',
+				text : "0"
+			});
+
+			this.nodes.push({
+				id : 'score2txt',
+				x  : (canvas.width/2)+(canvas.width/4),
+				y  : canvas.height/6,
+				color  : 'white',
+				text : "0"
+			});
+
+			this.nodes.push({
+				id : 'keypress',
+				w  : false,
+				s  : false,
+				uparrow  : false,
+				downarrow : false,
+				space : false
+			});
+
+			this.nodes.push({
+				id : 'player1',
+				x  : 0,
+				y  : 0,
+				width  : canvas.width*.05,
+				height : canvas.height*.20,
+				color  : 'white'
+			});
+
+			this.nodes.push({
+				id : 'player2',
+				x  : canvas.width-(canvas.width*.05),
+				y  : 0,
+				width  : canvas.width*.05,
+				height : canvas.height*.20,
+				color  : 'white'
+			});
+
+			this.nodes.push({
+				id : 'ball',
+				x  : canvas.width/2,
+				y  : canvas.height/2,
+				radius: canvas.width*.01+canvas.height*.01,
+				diameter: (canvas.width*.01+canvas.height*.01)*2,
+				width  : canvas.width*.1,
+				height : canvas.height*.1,
+				velocityX: (3*rand_1_or_neg1()),
+				velocityY: (5*rand_1_or_neg1()),
+				//bounce velocity should be same as velocity its set on paddle bounce because the value must be reset
+				bounce_velocityX: 3,
+				bounce_velocityY: 5,
+
+				//left / right direction as 0/1
+				direction: 1,
+				color  : 'white'
+			})
+
+			this.nodes.push({
+				id : 'gamestate',
+				gamestate  :0,
+				});
+
+				this.nodes.push({
+					id : 'score',
+					team1_score: 0,
+					team2_score: 0
+				});
+
+				//paddle speed
+				this.nodes.push({
+					id : 'speed',
+					speed: 3
+				});
+
 		};
 
-		app.onUpdate = function(time){
-			this.getNode('black-box').y++;
+		//random number between 1 and negative 1
+		function rand_1_or_neg1()
+		{
+			var rand = (Math.floor(Math.random() * 2)+1)
+			if (rand == 2)
+				rand = -1
+			if (rand == 1)
+				rand = 1
+			return(rand)
+		}
 
-			if(Math.cos(this.timestamp / 100) > 0){
-				this.getNode('red-box').direction = -1;
-			}else{
-				this.getNode('red-box').direction = 1;
+
+			document.addEventListener("keydown", (e) =>
+		{
+			if (e.key == "w")
+			{
+				app.getNode('keypress').w = true;
+			}
+			if (e.key == "s")
+			{
+				app.getNode('keypress').s = true;
 			}
 
-			this.getNode('red-box').x+=this.getNode('red-box').direction;
+			if (e.key == "ArrowUp")
+			{
+				app.getNode('keypress').uparrow = true;
+			}
+			if (e.key == "ArrowDown")
+			{
+				app.getNode('keypress').downarrow = true;
+			}
+			if (e.key == "space" || e.keyCode == 32)
+			{
+				app.getNode('keypress').space = true;
+			}
+			//console.log(e.keyCode)
+		})
+		document.addEventListener("keyup", (e) =>
+		{
+			if (e.key == "w")
+			{
+				app.getNode('keypress').w = false;
+			}
+			if (e.key == "s")
+			{
+				app.getNode('keypress').s = false;
+			}
+			if (e.key == "ArrowUp")
+			{
+				app.getNode('keypress').uparrow = false;
+			}
+			if (e.key == "ArrowDown")
+			{
+				app.getNode('keypress').downarrow = false;
+			}
+			if (e.key == "space" || e.keyCode == 32)
+			{
+				app.getNode('keypress').space = false;
+				app.pause_unpause()
+			}
+		})
+		//Unused, but specified in requirements
+		app.start = function ()
+		{
+			app.pause_unpause()
+		}
+		app.pause_unpause = function ()
+		{
+			if (app.getNode('gamestate').gamestate == 1)
+				app.getNode('gamestate').gamestate = 0
+			else if (app.getNode('gamestate').gamestate == 0)
+					app.getNode('gamestate').gamestate = 1
+		}
+		function moveBall()
+		{
+						//Move ball
+						app.getNode('ball').x += app.getNode('ball').velocityX
+						app.getNode('ball').y += app.getNode('ball').velocityY
+						//reverse direction
+						if (app.getNode('ball').y + app.getNode('ball').radius > canvas.height
+					      || app.getNode('ball').y - app.getNode('ball').radius < 0)
+						{
+								app.getNode('ball').velocityY  = app.getNode('ball').velocityY * -1
+						}
+		}
+		function movePlayer()
+		{
+			if (app.getNode('keypress').w == true)
+				if (app.getNode('player2').y > 0)
+				{
+					app.getNode('player2').y -= app.getNode('speed').speed
+				}
+			if (app.getNode('keypress').s == true)
+				if (app.getNode('player2').y < canvas.height-app.getNode('player2').height)
+				{
+					app.getNode('player2').y += app.getNode('speed').speed
+				}
+
+				if (app.getNode('keypress').uparrow == true)
+					if (app.getNode('player1').y > 0)
+					{
+						app.getNode('player1').y -= app.getNode('speed').speed
+					}
+				if (app.getNode('keypress').downarrow == true)
+					if (app.getNode('player1').y < canvas.height-app.getNode('player1').height)
+					{
+						app.getNode('player1').y += app.getNode('speed').speed
+					}
+		}
+		function paddleCollision()
+		{
+			//Function returns 1 if collision left paddle and 2 if collision right paddle
+			//simplify expresisons a bit
+			let ballX = app.getNode('ball').x,
+			ballY = app.getNode('ball').y,
+			ballRadius = app.getNode('ball').radius,
+
+			lpaddleX = app.getNode('player1').x,
+			lpaddleY = app.getNode('player1').y,
+			lpaddleWidth = app.getNode('player1').width,
+			lpaddleHeight = app.getNode('player1').height
+
+			rpaddleX = app.getNode('player2').x,
+			rpaddleY = app.getNode('player2').y,
+			rpaddleWidth = app.getNode('player2').width,
+			rpaddleHeight = app.getNode('player2').height
+			//if left paddle hits, return 1
+			let p = []
+			//right paddle
+			p.top = rpaddleY
+			p.bottom = rpaddleY + rpaddleHeight
+			p.left = rpaddleX
+			p.right = rpaddleX + rpaddleWidth
+			//left paddle
+			let p2 = []
+			p2.top = lpaddleY
+			p2.bottom = lpaddleY + lpaddleHeight
+			p2.left = lpaddleX
+			p2.right = lpaddleX + lpaddleWidth
+			//ball
+			let b = []
+			b.top = ballY - ballRadius
+			b.bottom = ballY + ballRadius
+			b.left = ballX - ballRadius
+			b.right = ballX + ballRadius
+//console.log(b.bottom)
+			if (b.right > p.left && b.top < p.bottom && b.left < p.right && b.bottom > p.top)
+			{
+				return(1)
+			}
+			if (b.right > p2.left && b.top < p2.bottom && b.left < p2.right && b.bottom > p2.top)
+			{
+				return(2)
+			}
+			return(0)
+		}
+		function checkScore()
+		{
+			if (app.getNode('ball').x-app.getNode('ball').width > canvas.width)
+			{
+				app.getNode('score').team2_score++
+				console.log("Score: "+  app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
+				app.reset()
+			}
+			if (app.getNode('ball').x+app.getNode('ball').width < 0)
+			{
+				app.getNode('score').team1_score++
+				console.log("Score: " + app.getNode('score').team2_score + " to " + app.getNode('score').team1_score)
+				app.reset()
+			}
+		}
+		//Adjust ball velocity left/right based on plaer paddle
+		function adjust_ball_velocity(left_right)
+		{
+			app.getNode('ball').velocityX *= -1
+			/*Set velocity of ball up/down depending on where it hit
+			Basic logic of if statements is the same between paddle 1 & paddle 2
+			keeping code "DRY" by defining variables*/
+			let py = 0
+			if (left_right == 1) py = app.getNode('player2').y
+			if (left_right == 2) py = app.getNode('player1').y
+
+			//Bounce ball up or down depending on where it was hit
+				if (app.getNode('ball').y < py)
+					app.getNode('ball').velocityY = -(app.getNode('ball').bounce_velocityY)
+				if (app.getNode('ball').y > py)
+					app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY)
+		}
+
+		app.reset = function () {
+			app.getNode('ball').x = canvas.width/2
+			app.getNode('ball').y = canvas.height/2
+			app.getNode('ball').velocityX = (app.getNode('ball').bounce_velocityX*rand_1_or_neg1())
+			app.getNode('ball').velocityY = (app.getNode('ball').bounce_velocityY*rand_1_or_neg1())
+		}
+		app.onUpdate = function(time){
+			//Score in top left and right middle
+			app.getNode('score1txt').text = app.getNode('score').team2_score
+			app.getNode('score2txt').text = app.getNode('score').team1_score
+
+			if (app.getNode('gamestate').gamestate == 1)
+			{
+				//Move ball by velocity
+				moveBall()
+				//Move played by keypress
+				movePlayer()
+				//right paddle collision with ball
+				if (paddleCollision() == 1 && app.getNode('ball').velocityX > 0)
+				{
+					adjust_ball_velocity(1)
+				}
+				//left paddle collision with ball
+				else if (paddleCollision() == 2 && app.getNode('ball').velocityX < 0)
+				{
+					adjust_ball_velocity(2)
+				}
+				checkScore()
+			}
+
 		};
 	</script>
 </body>

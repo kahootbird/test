@@ -15,6 +15,8 @@ var app = {
 	now        : 0,
 	lastUpdate : 0,
 
+//drawtext
+	texttodraw: "",
 	init : function(){
 		this.canvas  = document.getElementById('canvas');
 		this.context = this.canvas.getContext('2d');
@@ -22,6 +24,24 @@ var app = {
 		this.render();
 		this.onInit();
 	},
+	//Draw text
+	drawText: function(x,y,color,txttodraw)
+	{
+			texttodraw = txttodraw
+			this.context.font = '48px Arial';
+			this.context.fillStyle = color
+			this.context.fillText(txttodraw, x, y);
+	},
+
+	drawCircle: function(x,y,radius,color)
+	{
+		this.context.fillStyle = color;
+		this.context.beginPath();
+		this.context.arc(x,y,radius,0,Math.PI*2,false);
+		this.context.closePath();
+		this.context.fill();
+	},
+
 	render : function(){
 		this.clear();
 		this.update();
@@ -39,8 +59,21 @@ var app = {
 		for(var index in this.nodes){
 			var node = this.nodes[index];
 
-			this.context.fillStyle = node.color;
-			this.context.fillRect(node.x, node.y, node.width, node.height);
+			if (node.text != null)
+			{
+				this.drawText(node.x,node.y,node.color,node.text)
+			}
+
+			else if (node.radius != null)
+			{
+				this.drawCircle(node.x,node.y,node.radius,node.color)
+			}
+
+			else
+			{
+				this.context.fillStyle = node.color;
+				this.context.fillRect(node.x, node.y, node.width, node.height);
+			}
 		}
 
 		this.lastUpdate = Date.now();
